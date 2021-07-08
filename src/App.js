@@ -1,22 +1,30 @@
-import { React, Component } from "react";
+import { Component } from "react";
 import "./styles.css";
 
 class App extends Component {
   state = {
-    clients: [
-      { id: 1, name: "Od KP" },
-      { id: 2, name: "Al KP" },
-      { id: 3, name: "Roma KP" }
-    ]
+    clients: [],
+    newClient: ""
   };
-
+  onChange = (event) => {
+    const value = event.currentTarget.value;
+    this.setState({ newClient: value });
+  };
   onDell = (id) => {
     const clients = this.state.clients.slice();
     const index = clients.findIndex((client) => client.id === id);
     clients.splice(index, 1);
     this.setState({ clients });
   };
+  handleSubmit = (event) => {
+    event.preventDefault();
 
+    const clients = this.state.clients.slice();
+    const id = new Date();
+    const name = this.state.newClient;
+    clients.push({ id, name });
+    this.setState({ clients, newClient: "" });
+  };
   render() {
     const client = this.state.clients.map((client) => (
       <li key={client.id}>
@@ -27,12 +35,18 @@ class App extends Component {
       <div className="lol">
         <br />
         <br />
-        <ul>{client} </ul>
-
+        <br />
+        <ul>{client}</ul>
         <br />
         <br />
-        <input placeholder="Add new client here !" />
-        <button>Add clientc !</button>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            value={this.state.newClient}
+            onChange={this.onChange}
+            placeholder="Add new client here !"
+          />
+          <button>Add new</button>
+        </form>
       </div>
     );
   }
