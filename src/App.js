@@ -1,30 +1,41 @@
 import { Component } from "react";
 import "./styles.css";
 
-class App extends Component {
+export default class App extends Component {
   state = {
-    clients: [],
-    newClient: ""
+    clients: [
+      // {id:1, name:'od KP'}
+    ],
+    value: ""
   };
-  onChange = (event) => {
-    const value = event.currentTarget.value;
-    this.setState({ newClient: value });
-  };
+
   onDell = (id) => {
     const clients = this.state.clients.slice();
     const index = clients.findIndex((client) => client.id === id);
     clients.splice(index, 1);
     this.setState({ clients });
   };
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    const clients = this.state.clients.slice();
-    const id = new Date();
-    const name = this.state.newClient;
-    clients.push({ id, name });
-    this.setState({ clients, newClient: "" });
+  onChange = (event) => {
+    const value = event.currentTarget.value;
+    this.setState({ value });
   };
+
+  onSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.value) {
+      const name = this.state.value;
+      const id = new Date().getTime();
+      const client = { id, name };
+      const clients = this.state.clients.slice();
+      clients.push(client);
+      this.setState({ clients, value: "" });
+    } else {
+      alert("tape !");
+    }
+  };
+
+  addClient = () => {};
+
   render() {
     const client = this.state.clients.map((client) => (
       <li key={client.id}>
@@ -36,19 +47,21 @@ class App extends Component {
         <br />
         <br />
         <br />
+        <br />
         <ul>{client}</ul>
         <br />
         <br />
-        <form onSubmit={this.handleSubmit}>
+        <br />
+        <br />
+        <form onSubmit={this.onSubmit}>
           <input
-            value={this.state.newClient}
+            value={this.state.value}
             onChange={this.onChange}
-            placeholder="Add new client here !"
+            placeholder="Add the new client here !"
           />
-          <button>Add new</button>
+          <button>Add client !</button>
         </form>
       </div>
     );
   }
 }
-export default App;
